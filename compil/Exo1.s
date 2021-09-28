@@ -38,3 +38,7 @@ f:
 	.size	f, .-f
 	.comm	a,4,4
 	.ident	"GCC: (15:9-2019-q4-0ubuntu2) 9.2.1 20191025 (release) [ARM/arm-9-branch revision 277599]"
+
+
+#y n'est pas initialisé, donc ce n'est pas sa position qui n'est pas indiquée, mais son décalage par rapport aux autres valeurs.
+#(Ici, 4 octets, car y est un int32).
