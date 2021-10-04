@@ -1,25 +1,26 @@
 CC = arm-none-eabi-gcc
 LD = arm-none-eabi-gcc
-DB = gdb-multiarch 
+AS = arm-none-eabi-as
+GDB = gdb-multiarch 
 
 SERVER= JLinkGDBServer -device STM32L475VG -endian little -if SWD -speed auto -ir -LocalhostOnly
 
-LDFLAGS= -nostdlib
-CFLAGS = -c -g -O1 -mcpu=cortex-m4 -mthumb
+LDFLAGS= -nostdlib -T ld_ram.lds
+CFLAGS = -g -O1 -mcpu=cortex-m4 -mthumb
+ASFLAGS = -g -mcpu=cortex-m4 -mthumb
 
-LINKERS = ld_ram.lds
-OBJS = main.o
+
+OBJS = main.o crt0.o init.o
 EXE = main
 
 .PHONY: clean
 
 all: $(EXE)
 
-main: $(LINKERS) $(OBJS)
-	$(LD) $(LDFLAGS) -T $^ -o $@
+main: $(OBJS)
+	$(LD) $(LDFLAGS) $^ -o $@
 
-%.o : %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+
 
 clean:
 	rm -f $(OBJS)
@@ -29,4 +30,4 @@ connect:
 	JLinkGDBServer -device STM32L475VG -endian little -if SWD -speed auto -ir -LocalhostOnly
 
 debug:
-	gdb-multiarch $(EXE)
+	$(GDB) $(EXE)
