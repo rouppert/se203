@@ -1,5 +1,3 @@
-add-auto-load-safe-path /home/pascal/Programmation/pascal-rouppert/TD_bare_metal/.gdbinit
-
 target ext :2331
 mon endian little
 mon halt

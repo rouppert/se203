@@ -49,7 +49,7 @@ void *memmove(void *dest, const void *src, size_t n) {
 
 int memcmp(const void *s1, const void *s2, size_t n) {
     for (uint8_t i = 0; i < n; i++) {
-        uint8_t diff = ((uint8_t*)s2 + i) - ((uint8_t*)s1 + i);
+        uint8_t diff = *((uint8_t*)s2 + i) - *((uint8_t*)s1 + i);
         if (diff != 0) {
             return diff;
         }

@@ -9,8 +9,7 @@ LDFLAGS= -nostdlib -T ld_ram.lds
 CFLAGS = -g -O1 -mcpu=cortex-m4 -mthumb
 ASFLAGS = -g -mcpu=cortex-m4 -mthumb
 
-
-OBJS = main.o crt0.o init.o
+OBJS = main.o crt0.o init.o memfunc.o led.o
 EXE = main
 
 .PHONY: clean
