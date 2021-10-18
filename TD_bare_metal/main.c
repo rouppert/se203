@@ -3,6 +3,7 @@
 
 
 int main() {
+    clocks_init();
     led_init();
     led(LED_BLUE);
     led(LED_YELLOW);

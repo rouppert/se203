@@ -3,11 +3,13 @@ LD = arm-none-eabi-gcc
 AS = arm-none-eabi-as
 GDB = gdb-multiarch 
 
+
 SERVER= JLinkGDBServer -device STM32L475VG -endian little -if SWD -speed auto -ir -LocalhostOnly
 
 LDFLAGS= -nostdlib -T ld_ram.lds
 CFLAGS = -g -O1 -mcpu=cortex-m4 -mthumb
 ASFLAGS = -g -mcpu=cortex-m4 -mthumb
+CPPFLAGS = -ICMSIS/Include/ -ICMSIS/Device/ST/STM32L4xx/Include/
 
 OBJS = main.o crt0.o init.o memfunc.o led.o
 EXE = main
@@ -30,3 +32,6 @@ connect:
 
 debug:
 	$(GDB) $(EXE)
+
+.%.dep : %.c
+	$(CC) -MM $< -MF $@
