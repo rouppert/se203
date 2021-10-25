@@ -7,21 +7,19 @@ GDB = gdb-multiarch
 SERVER= JLinkGDBServer -device STM32L475VG -endian little -if SWD -speed auto -ir -LocalhostOnly
 
 LDFLAGS= -nostdlib -T ld_ram.lds
-CFLAGS = -g -O1 -mcpu=cortex-m4 -mthumb
+CFLAGS = -g -O1 -mcpu=cortex-m4 -mthumb -ffreestanding -mfloat-abi=hard -mfpu=fpv4-sp-d16
 ASFLAGS = -g -mcpu=cortex-m4 -mthumb
 CPPFLAGS = -ICMSIS/Include/ -ICMSIS/Device/ST/STM32L4xx/Include/
 
-OBJS = main.o crt0.o init.o memfunc.o led.o
+OBJS = main.o crt0.o init.o memfunc.o  uart.o
 EXE = main
 
 .PHONY: clean
 
 all: $(EXE)
 
-main: $(OBJS)
+main: $(OBJS) clocks.o
 	$(LD) $(LDFLAGS) $^ -o $@
-
-
 
 clean:
 	rm -f $(OBJS)
@@ -34,4 +32,4 @@ debug:
 	$(GDB) $(EXE)
 
 .%.dep : %.c
-	$(CC) -MM $< -MF $@
+	$(CC) $(CPPFLAGS) -MM $< -MF $@

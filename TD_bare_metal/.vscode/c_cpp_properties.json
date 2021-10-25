@@ -3,7 +3,9 @@
         {
             "name": "Linux",
             "includePath": [
-                "${default}"
+                "${default}",
+                "${workspaceFolder}/CMSIS/Device/ST/STM32L4xx/Include",
+                "${workspaceFolder}/CMSIS/Include"
             ],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "gnu17",
