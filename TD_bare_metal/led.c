@@ -28,46 +28,41 @@ const int pinc_on = 9;
 const int pinc_off = 25;
 
 void led_init(void) {
-    RCC -> AHB2ENR |= RCC_AHB2ENR_GPIOBEN_Msk; // enables clock of GPIOB;
-    RCC -> AHB2ENR |= RCC_AHB2ENR_GPIOCEN_Msk; // enables clock of GPIOC;
-    GPIOB -> MODER |= GPIO_MODER_MODE14_Msk; // The 14th port is defined as output.
-    GPIOC -> MODER |= GPIO_MODER_MODE9_Msk; // The nineth port is defined as output.
-
+    RCC -> AHB2ENR = (RCC -> AHB2ENR & ~RCC_AHB2ENR_GPIOBEN_Msk) | RCC_AHB2ENR_GPIOBEN; // enables clock of GPIOB;
+    RCC -> AHB2ENR = (RCC -> AHB2ENR & ~RCC_AHB2ENR_GPIOCEN_Msk) | RCC_AHB2ENR_GPIOCEN; // enables clock of GPIOC;
+    GPIOB -> MODER = (GPIOB -> MODER & ~GPIO_MODER_MODE14_Msk) | GPIO_MODER_MODE14_0; // The 14th port is defined as output.
+    GPIOC -> MODER = (GPIOC -> MODER & ~GPIO_MODER_MODE9_Msk) | GPIO_MODER_MODE9_0; // The nineth port is defined as output.
 }
 
 void led_g_on() {
-    GPIOB -> BSRR |= 1 <<pinb_on;
+    GPIOB -> BSRR = 1 << GPIO_BSRR_BS14_Pos;
 }
 
 void led_g_off() {
-    GPIOB -> BSRR |= 1 << pinb_off;
-    
+    GPIOB -> BSRR = 1 << GPIO_BSRR_BR14_Pos;   
 }
 
 void led(state_t state) {
-    switch (state) {
-        case LED_YELLOW:
-        {
-            GPIOC -> BSRR |= 1 <<pinc_on;
-            GPIOC -> MODER |= GPIO_MODER_MODE9_Msk; // The nineth port is defined as output.
-        };
+    if (state==LED_YELLOW)
+    {
+        GPIOC -> BSRR = 1 << GPIO_BSRR_BS9_Pos;
+        GPIOC -> MODER = (GPIOC -> MODER & ~GPIO_MODER_MODE9_Msk) | GPIO_MODER_MODE9_0; // The nineth port is defined as output.
+    };
 
-        case LED_BLUE:
-        {
-            GPIOC -> BSRR |= 1 <<pinc_off;
-            GPIOC -> MODER |= GPIO_MODER_MODE9_Msk; // The nineth port is defined as output.
-        };
+    if (state==LED_BLUE)
+    {
+        GPIOC -> BSRR = 1 <<GPIO_BSRR_BR9_Pos;
+        GPIOC -> MODER = (GPIOC -> MODER & ~GPIO_MODER_MODE9_Msk) | GPIO_MODER_MODE9_0; // The nineth port is defined as output.
+    };
 
-        case LED_GREEN:
-        {
-            led_g_on();
-            led_g_off();
-        }
-
-        case LED_OFF:
-        {
-            GPIOC -> MODER &= ~(1<<18); // set bit 18 to 0;
-            GPIOC -> MODER &= ~(1<<19); // set bit 19 to 0;
-        };
+    if (state==LED_GREEN)
+    {
+        led_g_on();
     }
+
+    if (state==LED_OFF)
+    {
+        GPIOC -> MODER = (GPIOC -> MODER & ~GPIO_MODER_MODE9_Msk) & ~GPIO_MODER_MODE9;
+        led_g_off();
+    };
 }
