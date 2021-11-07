@@ -3,7 +3,7 @@
 //Page 70 : utiliser PB6 pour USART1_TX et PB7 pour USART2_RX.
 //Page 70 : utiliser AF7 pour USART1.
 
-void uart_init() {
+void uart_init(int baudrate) {
     RCC -> AHB2ENR |= RCC_AHB2ENR_GPIOBEN; // enables clock of GPIOB;
     RCC -> APB2ENR |= RCC_APB2ENR_USART1EN; // enables clock of USART1, which is on APB2 bus;
     RCC -> CCIPR &= ~RCC_CCIPR_USART1SEL; // sets USART1 bits on RCC_CCIPR register to 00, which means "PCLK selected as USART1 clock" (page 272)
@@ -15,7 +15,7 @@ void uart_init() {
     GPIOB -> AFR[0] = (GPIOB -> AFR[0] & ~GPIO_AFRL_AFSEL7_Msk) | (7 << GPIO_AFRL_AFSEL7_Pos); //sets GPIOB_AFRL_AFSEL7 to 0111, which means AF7 (page 307)
     USART1 -> CR1 = 0;
     USART1 -> CR2 = 0;
-    USART1 -> BRR = 80000000 / 115200; //sets baudrate to 115200(page 1388) (formula page 1349)
+    USART1 -> BRR = 80000000 / baudrate; //sets baudrate to 115200(page 1388) (formula page 1349)
     //USART1 -> CR1 &= ~USART_CR1_OVER8; // Serts USART1 CR1 OVER8 bit to 0 => oversampling by 16 (page 1378)
     USART1 -> CR1 |= USART_CR1_UE; //Sets USART1 CR1 UE bit to 1 => enables USART1 (page 1377)
     USART1 -> CR1 |= USART_CR1_TE; //Sets USART1 CR1 TE bit to 1 => enables transmission (page 1379)
