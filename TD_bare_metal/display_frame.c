@@ -1,36 +1,40 @@
 #include "display_frame.h"
+#include "clocks.h"
+#include "irq.h"
 
-uint8_t* frame;
-uint8_t* current_byte;
-int end_frame = 0;
+uint8_t frame[192];
+int end_frame;
 
 // Handler for exception raised if a byte is written in current frame;
 void USART1_IRQHandler(void) {
+    __disable_irq();
     update_matrix();
+    __enable_irq();
 }
 
 void update_matrix() {
-    if (*current_byte == 0xff) {
+    char current_byte = uart_getchar();
+    if ((current_byte == 0xff) | (end_frame == 256)) {
         end_frame = 0;
     }
 
     else {
-        frame[end_frame] = *current_byte;
+        frame[end_frame] = current_byte;
         end_frame ++;
-        display_image(frame, end_frame++);
     }
 }
 
-void update_frame(uint8_t* end_frame_pointer) {
-    uart_gets(current_byte, 1);
-}
-
-void display_file(uint8_t* file) {
+void display_file() {
     clocks_init();
-    uart_init(38400);
+    irq_init();
+    uart_init(2000);
+    NVIC_EnableIRQ(37);
+    matrix_init();
+    deactivate_rows();
     USART1 -> CR1 = (USART1 -> CR1 &~ USART_CR1_RXNEIE_Msk) | USART_CR1_RXNEIE;
+    end_frame = 0;
     while (1) {
-        update_frame(end_frame);
+        display_image(frame, end_frame);
     }
 }
 

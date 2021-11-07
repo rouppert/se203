@@ -6,8 +6,8 @@
 #include "irq.h"
 
 void USART1_IRQHandler(void);
-void update_frame(uint8_t* end_frame_pointer);
-void update_matrix();
-void display_file(uint8_t* file);
+void update_frame(void);
+void update_matrix(void);
+void display_file(void);
 
 #endif
