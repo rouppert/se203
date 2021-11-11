@@ -275,6 +275,9 @@ void display_image(uint8_t image[], int imageLength) {
     uint8_t ch;
     rgb_color rgb;
     rgb_color row[8];
+    rgb.b = 0;
+    rgb.g = 0;
+    rgb.r = 0;
     for (int j=0; j<8; j++) {
         row[j].b = 0;
         row[j].g = 0;
@@ -314,7 +317,4 @@ void display_image(uint8_t image[], int imageLength) {
     }
     deactivate_rows();
     mat_set_row(rowNumber, row);
-    //deactivate_rows();
-    //mat_set_row(rowNumber, row);
-    
 }

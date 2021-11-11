@@ -1,5 +1,11 @@
 {
     "files.associations": {
-        "stdlib.h": "c"
-    }
+        "stdlib.h": "c",
+        "stm32l475xx.h": "c",
+        "irq.h": "c",
+        "test_IRQ2.C": "cpp",
+        "stddef.h": "c",
+        "core_cm4.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "Enabled"
 }

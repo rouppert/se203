@@ -1,5 +1,6 @@
 .syntax unified
 .global _start
+//.section .memfunc_section
 .thumb
 
 _start:
