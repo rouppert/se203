@@ -11,15 +11,15 @@ _stack = ORIGIN(sram2)  + LENGTH(sram2) ;
 SECTIONS {
     .text : {
         *(.text)
-    } > sram1
+    } > flash
 
     .rodata : {
         *(.rodata)
-    } > sram1
+    } > flash
 
     .data : {
         *(.data)
-    } > sram1
+    } > sram1 AT> flash
 
     .bss : {
         _sbss = . ;
